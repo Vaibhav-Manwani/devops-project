@@ -1,0 +1,8 @@
+#ignore tf state
+*.tfstate
+*.tfstate.backup
+.terraform/
+
+#ignore critical files
+*.pem
+*.key
