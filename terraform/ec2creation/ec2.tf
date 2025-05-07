@@ -44,6 +44,7 @@ resource "aws_instance" "project-servers" {
   })
   ami             = var.ami_id
   instance_type   = each.value
+  user_data = each.key == "ansible-management" ? file("install-ansible.sh") : null
   subnet_id = "subnet-04b3465565f3be910"
   vpc_security_group_ids = [ aws_security_group.devops-sg.id ]
   key_name        = aws_key_pair.deployer.key_name
