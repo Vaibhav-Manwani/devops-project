@@ -1,0 +1,21 @@
+---
+- name: Installing Maven on Jenkins slave node
+  hosts: jenkins-slave
+  become: true
+  tasks:
+  - name: update cache
+    apt:
+      update_cache: true
+
+  - name: Installing maven 
+    apt: 
+      name: maven
+      state: present
+
+  - name: Verifing maven installation 
+    command: "mvn -version"
+    register: maven_version
+
+  - name: Verify maven version
+    debug: 
+      var: maven_version
