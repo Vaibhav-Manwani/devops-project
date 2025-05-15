@@ -11,7 +11,7 @@ variable "root_storage" {
 }
 
 variable "ami_id" {
-  default = "ami-084568db4383264d4"
+  default = "ami-075686beab831bb7f"
   type = string
 }
 

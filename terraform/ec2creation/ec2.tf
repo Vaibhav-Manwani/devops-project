@@ -9,7 +9,7 @@ resource "aws_key_pair" "deployer" {
 resource "aws_security_group" "devops-sg" {
   name        = "devops-sg"
   description = "Allow TLS inbound traffic and all outbound traffic"
-  vpc_id      = "vpc-05826fad71152b833"
+  vpc_id      = "vpc-08007e06d4d4bd5c2"
 
   tags = {
     Name = "allow_tls"
@@ -44,18 +44,16 @@ resource "aws_instance" "project-servers" {
   
   #count           = 3  #meta argument used to increase count but doesn't change the name of instance
   for_each = tomap({         # another meta argument used to create instance. Kinda like a loop. You use tomap({}) with dictionary and toset([]) for a list of objects
-    jenkins-master = "t2.micro"      # also when using toset([]) remember to change to square brackets instead of curly ones.
-    jenkins-slave = "t2.micro"
-    ansible-management = "t2.micro"
+    jenkins-server = "t2.medium"
   })
   ami             = var.ami_id
   instance_type   = each.value
-  user_data = each.key == "ansible-management" ? file("install-ansible.sh") : null
-  subnet_id = "subnet-04b3465565f3be910"
+  user_data = file("install-jenkins.sh")
+  subnet_id = "subnet-0e6935b35f2aef7ac"
   vpc_security_group_ids = [ aws_security_group.devops-sg.id ]
   key_name        = aws_key_pair.deployer.key_name
   root_block_device {
-    volume_size = var.env == "prod" ? 20 : var.root_storage #conditional statement in terraform
+    volume_size = var.env == "prod" ? 30 : var.root_storage #conditional statement in terraform
     volume_type = "gp3"
   }
   depends_on = [ aws_security_group.devops-sg, aws_key_pair.deployer ]  #another meta argument to declare the order in which resources must be created
