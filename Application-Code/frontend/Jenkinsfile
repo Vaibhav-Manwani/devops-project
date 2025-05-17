@@ -17,7 +17,7 @@ pipeline{
 
         stage("Fetching git repo"){
             steps{
-                git branch 'main', credentialsId: 'Github', url: "https://github.com/Vaibhav-Manwani/devops-project.git"
+                git credentialsId: 'Github', url: "https://github.com/Vaibhav-Manwani/devops-project.git"
             }
         }
 
