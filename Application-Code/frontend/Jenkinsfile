@@ -1,4 +1,4 @@
-pipeline{
+pipeline{ 
     agent any 
     tools{
         nodejs
@@ -17,18 +17,18 @@ pipeline{
 
         stage("Fetching git repo"){
             steps{
-                git branch 'main', credentialsID: 'Github', url: "https://github.com/Vaibhav-Manwani/devops-project.git"
+                git branch 'main', credentialsId: 'Github', url: "https://github.com/Vaibhav-Manwani/devops-project.git"
             }
         }
 
         stage ("Sonarqube Analysis"){
             steps{
                 withSonarQubeEnv("${SONARQUBE_ENV}") {
-                    sh """
+                    sh '''
                         sonar-scanner \
                         -Dsonar.projectKey=frontend \
                         -Dsonar.sources=. \
-                    """
+                    '''
         }
             }
         }
