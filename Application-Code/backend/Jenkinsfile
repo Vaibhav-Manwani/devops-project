@@ -1,0 +1,77 @@
+    pipeline{ 
+        agent any 
+        tools{
+            nodejs "nodejs"
+        }
+        environment {
+            SONARQUBE_ENV = 'sonar-server'
+            ECR_REPO = '211125410061.dkr.ecr.us-west-2.amazonaws.com/backend'
+            AWS_REGION = 'us-west-2'
+        }
+        stages{
+            stage ("Cleaning Workspace"){
+                steps{
+                        cleanWs()
+                    }
+            }
+
+            stage("Fetching git repo"){
+                steps{
+                    git branch: 'main', credentialsId: 'Github', url: "https://github.com/Vaibhav-Manwani/devops-project.git"
+                }
+            }
+
+            stage("Sonarqube Analysis") {
+                steps {
+                    script {
+                        // Get the path to the sonar-scanner tool (as defined in Jenkins Global Tool Config)
+                        def scannerHome = tool name: 'sonar-scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+
+                        dir("Application-Code/backend") {
+                            withSonarQubeEnv("${SONARQUBE_ENV}") {
+                                sh """
+                                    ${scannerHome}/bin/sonar-scanner \
+                                    -Dsonar.projectKey=backend \
+                                    -Dsonar.sources=. \
+                                    -Dsonar.host.url=http://44.248.60.106:9000
+                                """
+                                }
+                            }
+                        }
+                    }
+                }
+
+            // stage('Quality Gate') {
+            //     steps {
+            //         //timeout(time: 10, unit: 'MINUTES') {
+            //         waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token'
+            //         }
+            //     }
+            
+            stage("Build Image"){
+                steps{
+                    script{
+                        dir("Application-Code/backend"){
+                            sh 'docker system prune -a'
+                            sh 'docker build -t ${ECR_REPO}:${BUILD_NUMBER} .'
+                        }
+                    }
+                }
+            }
+
+            stage("Push image to ECR"){
+                steps{
+                    script{
+                        withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-creds']]) {
+                        sh '''
+                            aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin 211125410061.dkr.ecr.us-west-2.amazonaws.com
+                            docker tag $ECR_REPO:$BUILD_NUMBER $ECR_REPO:$BUILD_NUMBER
+                            docker push $ECR_REPO:$BUILD_NUMBER
+                        '''
+                        }
+                    }
+                }
+            }
+
+        }
+    }
