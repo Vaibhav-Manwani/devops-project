@@ -65,7 +65,7 @@
                         withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-creds']]) {
                         sh '''
                             aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin 211125410061.dkr.ecr.us-west-2.amazonaws.com
-                            docker tag $ECR_REPO:$BUILD_NUMBER
+                            docker tag $ECR_REPO:$BUILD_NUMBER $ECR_REPO:$BUILD_NUMBER
                             docker push $ECR_REPO:$BUILD_NUMBER
                         '''
                         }
