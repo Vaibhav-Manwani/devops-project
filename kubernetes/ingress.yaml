@@ -10,7 +10,7 @@ metadata:
 spec:
   ingressClassName: alb
   rules:
-    - host: threetier.devops
+    - host: vaibhavmdevops.live
       http:
         paths:
           - path: /backend

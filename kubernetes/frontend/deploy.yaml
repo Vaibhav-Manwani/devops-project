@@ -24,6 +24,6 @@ spec:
         name: frontend
         env:
           - name: REACT_APP_BACKEND_URL
-            value: "http://threetier.devops/api/tasks"
+            value: "http://vaibhavmdevops.live/api/tasks"
         resources: {}
 status: {}
