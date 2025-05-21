@@ -33,7 +33,7 @@ spec:
             secretKeyRef:
               name: mongo-secret
               key: MONGO_INITDB_ROOT_PASSWORD
-        - name: MOGO_HOST
-          value: mongo-svc
+        - name: MONGO_CONN_STR
+          value: mongodb://mongodb-svc:27017
         resources: {}
 status: {}
