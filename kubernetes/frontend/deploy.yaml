@@ -22,6 +22,8 @@ spec:
       containers:
       - image: 211125410061.dkr.ecr.us-west-2.amazonaws.com/frontend:6
         name: frontend
+        ports:
+        - containerPort: 3000
         env:
           - name: REACT_APP_BACKEND_URL
             value: "http://vaibhavmdevops.live/api/tasks"

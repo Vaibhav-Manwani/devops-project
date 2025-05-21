@@ -22,6 +22,8 @@ spec:
       containers:
       - image: 211125410061.dkr.ecr.us-west-2.amazonaws.com/backend:1
         name: backend
+        ports:
+        - containerPort: 3500
         env:
         - name: MONGO_USERNAME
           valueFrom:
