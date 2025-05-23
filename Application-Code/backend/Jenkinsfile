@@ -7,6 +7,8 @@
             SONARQUBE_ENV = 'sonar-server'
             ECR_REPO = '211125410061.dkr.ecr.us-west-2.amazonaws.com/backend'
             AWS_REGION = 'us-west-2'
+            GIT_REPO = "devops-project"
+            GIT_USER = "Vaibhav-Manwani"
         }
         stages{
             stage ("Cleaning Workspace"){
@@ -68,6 +70,27 @@
                             docker tag $ECR_REPO:$BUILD_NUMBER $ECR_REPO:$BUILD_NUMBER
                             docker push $ECR_REPO:$BUILD_NUMBER
                         '''
+                        }
+                    }
+                }
+            }
+
+            stage("Update deployment file"){
+                steps{
+                    dir("kubernetes/backend"){
+                        withCredentials([usernamePassword(credentialsId: 'Github', usernameVariable: 'GIT', passwordVariable: 'GIT_PASS')]){
+                            sh """
+                                git config user.email "manwani.vaibhav@gmail.com"
+                                git config user.name "Vaibhav-Manwani"
+                            
+                                echo "Replacing image tag in deployment.yaml..."
+                                sed -i "s|image: $ECR_REPO:.*|image: $ECR_REPO:$BUILD_NUMBER|" deployment.yaml
+                            
+                                git add deployment.yaml
+                                git status
+                                git commit -m "Updated image tag in backend deployment file" || echo "No changes to commit"
+                                git push https://${GIT}:${GIT_PASS}@github.com/${GIT_USER}/${GIT_REPO}.git HEAD:main
+                              """
                         }
                     }
                 }
