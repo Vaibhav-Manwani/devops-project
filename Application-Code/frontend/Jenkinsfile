@@ -33,7 +33,7 @@
                                     ${scannerHome}/bin/sonar-scanner \
                                     -Dsonar.projectKey=frontend \
                                     -Dsonar.sources=. \
-                                    -Dsonar.host.url=http://44.248.60.106:9000
+                                    -Dsonar.host.url=http://54.214.76.135:9000
                                 """
                                 }
                             }
@@ -68,6 +68,27 @@
                             docker tag $ECR_REPO:$BUILD_NUMBER $ECR_REPO:$BUILD_NUMBER
                             docker push $ECR_REPO:$BUILD_NUMBER
                         '''
+                        }
+                    }
+                }
+            }
+
+            stage("Update deployment file"){
+                steps{
+                    dir("kubernetes/frontend"){
+                        withCredentials([usernamePassword(credentialsId: 'Github', usernameVariable: 'GIT', passwordVariable: 'GIT_PASS')]){
+                            sh """
+                                git config user.email "manwani.vaibhav@gmail.com"
+                                git config user.name "Vaibhav-Manwani"
+                            
+                                echo "Replacing image tag in deployment.yaml..."
+                                sed -i "s|image: $ECR_REPO:.*|image: $ECR_REPO:$BUILD_NUMBER|" deploy.yaml
+                            
+                                git add deploy.yaml
+                                git status
+                                git commit -m "Updated image tag in backend deployment file"
+                                git push https://${GIT}:${GIT_PASS}@github.com/${GIT_USER}/${GIT_REPO}.git HEAD:main
+                              """
                         }
                     }
                 }
