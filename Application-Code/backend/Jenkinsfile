@@ -35,7 +35,7 @@
                                     ${scannerHome}/bin/sonar-scanner \
                                     -Dsonar.projectKey=backend \
                                     -Dsonar.sources=. \
-                                    -Dsonar.host.url=http://44.248.60.106:9000
+                                    -Dsonar.host.url=http://54.214.76.135:8080/
                                 """
                                 }
                             }
