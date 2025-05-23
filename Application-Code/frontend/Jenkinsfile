@@ -7,6 +7,8 @@
             SONARQUBE_ENV = 'sonar-server'
             ECR_REPO = '211125410061.dkr.ecr.us-west-2.amazonaws.com/frontend'
             AWS_REGION = 'us-west-2'
+            GIT_REPO = "devops-project"
+            GIT_USER = "Vaibhav-Manwani"
         }
         stages{
             stage ("Cleaning Workspace"){
