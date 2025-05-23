@@ -21,25 +21,25 @@
                 }
             }
 
-            stage("Sonarqube Analysis") {
-                steps {
-                    script {
-                        // Get the path to the sonar-scanner tool (as defined in Jenkins Global Tool Config)
-                        def scannerHome = tool name: 'sonar-scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+            // stage("Sonarqube Analysis") {
+            //     steps {
+            //         script {
+            //             // Get the path to the sonar-scanner tool (as defined in Jenkins Global Tool Config)
+            //             def scannerHome = tool name: 'sonar-scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
 
-                        dir("Application-Code/frontend") {
-                            withSonarQubeEnv("${SONARQUBE_ENV}") {
-                                sh """
-                                    ${scannerHome}/bin/sonar-scanner \
-                                    -Dsonar.projectKey=frontend \
-                                    -Dsonar.sources=. \
-                                    -Dsonar.host.url=http://54.214.76.135:9000
-                                """
-                                }
-                            }
-                        }
-                    }
-                }
+            //             dir("Application-Code/frontend") {
+            //                 withSonarQubeEnv("${SONARQUBE_ENV}") {
+            //                     sh """
+            //                         ${scannerHome}/bin/sonar-scanner \
+            //                         -Dsonar.projectKey=frontend \
+            //                         -Dsonar.sources=. \
+            //                         -Dsonar.host.url=http://54.214.76.135:9000
+            //                     """
+            //                     }
+            //                 }
+            //             }
+            //         }
+            //     }
 
             // stage('Quality Gate') {
             //     steps {
