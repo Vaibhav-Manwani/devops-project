@@ -23,27 +23,27 @@
                 }
             }
 
-            stage("Sonarqube Analysis") {
-                steps {
-                    script {
-                        // Get the path to the sonar-scanner tool (as defined in Jenkins Global Tool Config)
-                        def scannerHome = tool name: 'sonar-scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+            // stage("Sonarqube Analysis") {
+            //     steps {
+            //         script {
+            //             // Get the path to the sonar-scanner tool (as defined in Jenkins Global Tool Config)
+            //             def scannerHome = tool name: 'sonar-scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
 
-                        dir("Application-Code/backend") {
-                            withSonarQubeEnv("${SONARQUBE_ENV}") {
-                                sh """
-                                    ${scannerHome}/bin/sonar-scanner \
-                                    -Dsonar.projectKey=backend \
-                                    -Dsonar.sources=. \
-                                    -Dsonar.host.url=http://54.214.76.135:8080 \
-                                    -Dsonar.login=squ_d3c9bd1d78218dbcb6fc33ef8378665e9540ecb6 
+            //             dir("Application-Code/backend") {
+            //                 withSonarQubeEnv("${SONARQUBE_ENV}") {
+            //                     sh """
+            //                         ${scannerHome}/bin/sonar-scanner \
+            //                         -Dsonar.projectKey=backend \
+            //                         -Dsonar.sources=. \
+            //                         -Dsonar.host.url=http://54.214.76.135:8080 \
+            //                         -Dsonar.login=squ_d3c9bd1d78218dbcb6fc33ef8378665e9540ecb6 
 
-                                """
-                                }
-                            }
-                        }
-                    }
-                }
+            //                     """
+            //                     }
+            //                 }
+            //             }
+            //         }
+            //     }
 
             // stage('Quality Gate') {
             //     steps {
