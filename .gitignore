@@ -6,3 +6,6 @@
 #ignore critical files
 *.pem
 *.key
+
+#ignore jenkins tmp files
+**/@tmp
